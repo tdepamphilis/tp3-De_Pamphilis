@@ -1,1 +1,0 @@
-La direccion de servidor se encuentra en \TP2 De Pamphilis\FrontEnd\App.config.
