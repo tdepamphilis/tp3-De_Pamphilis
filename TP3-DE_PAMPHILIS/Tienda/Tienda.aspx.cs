@@ -12,86 +12,125 @@ namespace Tienda
     public partial class Tienda : System.Web.UI.Page
     {
 
+        public List<Producto> products = new List<Producto>();
+        public List<Categoria> categories = new List<Categoria>();
+        public List<Marca> brands = new List<Marca>();
+        ProductoBusiness productoBusiness = new ProductoBusiness();
+        MarcaBusiness marcaBusiness = new MarcaBusiness();
+        CategoriaBusiness categoriaBusiness = new CategoriaBusiness();
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            List<Producto> products = new List<Producto>();
-            ProductoBusiness productoBusiness = new ProductoBusiness();
-            products = productoBusiness.listar(0, 0);
-            loadcards(products);
+            if (!IsPostBack)
+            {
+                products = productoBusiness.listar(0, 0);
+                categories = categoriaBusiness.listar();
+                brands = marcaBusiness.listar();
+                startslider();
+            }
 
 
         }
 
-        private void loadcards(List<Producto> products)
+        private void startslider()
         {
-            // El for depende de la cantidad de productos, esto es para mostrar todo
-            // ya que tengo mas productos que tarjetas. Hay que cambiarlo.
-            
-            List<Image> images = addimagelist();
-            List<Label> names = addnamelist();
-            List<Label> descs = adddesclist();
+            DropDownListby.Items.Add("----");
+            DropDownListby.Items.Add("Categoria");
+            DropDownListby.Items.Add("Marca");
+            DropDownListfilter.Items.Add("------");
+        }
 
+        protected void updatefilter(object sender, EventArgs e)
+        {
 
-            for (int x = 0; x < products.Count(); x++)
+            if (DropDownListby.SelectedIndex == 2)
             {
-                if (products[x] != null)
-                {
-                    images[x].ImageUrl = products[x].imagen;
-                    names[x].Text = products[x].name;
-                    descs[x].Text = products[x].desc;
-                }
-                images[x].Height = 200;
-                images[x].Width = 170;
-                names[x].Font.Size = FontUnit.XLarge;
+                DropDownListfilter.DataSource = marcaBusiness.listar();
+                DropDownListfilter.DataBind();
+                search();
+
+
+            }
+            else if (DropDownListby.SelectedIndex == 1)
+            {
+                DropDownListfilter.DataSource = categoriaBusiness.listar();
+                DropDownListfilter.DataBind();
+                search();
+            }
+            else
+            {
+                DropDownListfilter.Items.Clear();
+                DropDownListfilter.Items.Add("------");
+                search();
 
             }
 
         }
-
-
-        private List<Image> addimagelist()
+        protected void searchpress(Object sender, EventArgs e)
         {
-            List<Image> images = new List<Image>();
-            images.Add(Image1);
-            images.Add(Image2);
-            images.Add(Image3);
-            images.Add(Image4);
-            images.Add(Image5);
-            images.Add(Image6);
-            images.Add(Image7);
-            images.Add(Image8);
 
-            return images;
         }
-        private List<Label> addnamelist()
+        protected void filterdata(object sender, EventArgs e)
         {
-            List<Label> names = new List<Label>();
-            names.Add(Name1);
-            names.Add(Name2);
-            names.Add(Name3);
-            names.Add(Name4);
-            names.Add(Name5);
-            names.Add(Name6);
-            names.Add(Name7);
-            names.Add(Name8);
 
-            return names;
+            search();
         }
-        private List<Label> adddesclist()
+        private void search()
         {
-            List<Label> descriptions = new List<Label>();
-            descriptions.Add(Desc1);
-            descriptions.Add(Desc2);
-            descriptions.Add(Desc3);
-            descriptions.Add(Desc4);
-            descriptions.Add(Desc5);
-            descriptions.Add(Desc6);
-            descriptions.Add(Desc7);
-            descriptions.Add(Desc8);
-
-            return descriptions;
+            if (DropDownListby.SelectedIndex == 1)
+            {
+                if (TextBoxsearch.Text == "")
+                {
+                    // se filtra por categoria sin nombre
+                    List<Categoria> aux = categoriaBusiness.listar();
+                    if (DropDownListfilter.SelectedIndex >= aux.Count())
+                        DropDownListfilter.SelectedIndex = 0;
+                    products = productoBusiness.listar(1, aux[DropDownListfilter.SelectedIndex].code);
+                }
+                else
+                {
+                    // se filtra por categoria y nombre
+                    List<Categoria> aux = categoriaBusiness.listar();
+                    if (DropDownListfilter.SelectedIndex >= aux.Count())
+                        DropDownListfilter.SelectedIndex = 0;
+                    products = productoBusiness.listarCriterio(TextBoxsearch.Text, 1, aux[DropDownListfilter.SelectedIndex].code);
+                }
+            }
+            else if (DropDownListby.SelectedIndex == 2)
+            {
+                if (TextBoxsearch.Text == "")
+                {
+                    // se filtra por marca
+                    List<Marca> aux = marcaBusiness.listar();
+                    if (DropDownListfilter.SelectedIndex >= aux.Count())
+                        DropDownListfilter.SelectedIndex = 0;
+                    products = productoBusiness.listar(2, aux[DropDownListfilter.SelectedIndex].code);
+                }
+                else
+                {
+                    // se filtra por marca y criterio
+                    List<Marca> aux = marcaBusiness.listar();
+                    if (DropDownListfilter.SelectedIndex >= aux.Count())
+                        DropDownListfilter.SelectedIndex = 0;
+                    products = productoBusiness.listarCriterio(TextBoxsearch.Text, 2, aux[DropDownListfilter.SelectedIndex].code);
+                }
+            }
+            else if (DropDownListby.SelectedIndex == 0)
+            {
+                if (TextBoxsearch.Text == "")
+                {
+                    // se muestran todos
+                    products = productoBusiness.listar(0, 0);
+                }
+                else
+                {
+                    // se muestran por nombre
+                    products = productoBusiness.listarCriterio(TextBoxsearch.Text, 0, 0);
+                }
+            }
         }
+
 
     }
 }
