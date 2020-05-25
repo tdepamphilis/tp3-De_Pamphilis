@@ -15,10 +15,11 @@ namespace Tienda
         public List<Producto> products = new List<Producto>();
         public List<Categoria> categories = new List<Categoria>();
         public List<Marca> brands = new List<Marca>();
+        List<Compra> chart = new List<Compra>();
         ProductoBusiness productoBusiness = new ProductoBusiness();
         MarcaBusiness marcaBusiness = new MarcaBusiness();
         CategoriaBusiness categoriaBusiness = new CategoriaBusiness();
-
+        public string page;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -28,7 +29,11 @@ namespace Tienda
                 categories = categoriaBusiness.listar();
                 brands = marcaBusiness.listar();
                 startslider();
+            } else
+            {
+                search();
             }
+            page = HttpContext.Current.Request.Url.AbsoluteUri;
 
 
         }
@@ -75,6 +80,14 @@ namespace Tienda
         {
 
             search();
+        }
+        public void buy(string code,string name, float price)
+        {
+            //compra item = new compra();
+            //item.code = code;
+            //item.price = price;
+            //item.name = name;
+            //chart.add(item);
         }
         private void search()
         {
@@ -131,6 +144,10 @@ namespace Tienda
             }
         }
 
+        //public List<Producto> fillchart(string url)
+        //{
 
+        //    return fillchart();
+        //}
     }
 }
