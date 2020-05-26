@@ -21,17 +21,23 @@ namespace Tienda
         CategoriaBusiness categoriaBusiness = new CategoriaBusiness();
         public string page;
 
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 products = productoBusiness.listar(0, 0);
+
                 categories = categoriaBusiness.listar();
                 brands = marcaBusiness.listar();
                 startslider();
-            } else
+            }
+            else
             {
+                
                 search();
+
             }
             page = HttpContext.Current.Request.Url.AbsoluteUri;
 
@@ -81,7 +87,7 @@ namespace Tienda
 
             search();
         }
-        public void buy(string code,string name, float price)
+        public void buy(string code, string name, float price)
         {
             //compra item = new compra();
             //item.code = code;
@@ -144,10 +150,25 @@ namespace Tienda
             }
         }
 
-        //public List<Producto> fillchart(string url)
-        //{
+        private Producto readsession()
+        {
+            var prod = new Producto();
+            try
+            {
+                
+                var artcode = (string)Request.QueryString["ART"];
+                var producto = productoBusiness.buscar(artcode);
+                return producto;
 
-        //    return fillchart();
-        //}
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            
+        }
     }
 }

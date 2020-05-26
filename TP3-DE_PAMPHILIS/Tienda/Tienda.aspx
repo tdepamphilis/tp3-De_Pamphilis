@@ -53,7 +53,7 @@
                         </div>
                         <div class="card-footer">
 
-                            <a href="<%=page+"?"+product.code %> "  >comprar</a>
+                            <a href="<%="Detalle.aspx?ART="+product.code %> "  >comprar</a>
                         </div>
                     </div>
                 </div>
