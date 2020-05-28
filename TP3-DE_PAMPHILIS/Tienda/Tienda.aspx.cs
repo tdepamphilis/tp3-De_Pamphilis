@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
 using Business;
 using Dominio;
 namespace Tienda
@@ -15,7 +16,7 @@ namespace Tienda
         public List<Producto> products = new List<Producto>();
         public List<Categoria> categories = new List<Categoria>();
         public List<Marca> brands = new List<Marca>();
-        List<Compra> chart = new List<Compra>();
+        public List<Compra> chart = new List<Compra>();
         ProductoBusiness productoBusiness = new ProductoBusiness();
         MarcaBusiness marcaBusiness = new MarcaBusiness();
         CategoriaBusiness categoriaBusiness = new CategoriaBusiness();
@@ -32,14 +33,22 @@ namespace Tienda
                 categories = categoriaBusiness.listar();
                 brands = marcaBusiness.listar();
                 startslider();
+                writesession();
+
+
             }
             else
             {
-                
+
                 search();
 
             }
             page = HttpContext.Current.Request.Url.AbsoluteUri;
+            chart = readsession();
+
+
+
+
 
 
         }
@@ -87,14 +96,7 @@ namespace Tienda
 
             search();
         }
-        public void buy(string code, string name, float price)
-        {
-            //compra item = new compra();
-            //item.code = code;
-            //item.price = price;
-            //item.name = name;
-            //chart.add(item);
-        }
+
         private void search()
         {
             if (DropDownListby.SelectedIndex == 1)
@@ -150,25 +152,60 @@ namespace Tienda
             }
         }
 
-        private Producto readsession()
+        private void writesession()
         {
-            var prod = new Producto();
+            var comp = new Compra();
             try
             {
-                
-                var artcode = (string)Request.QueryString["ART"];
-                var producto = productoBusiness.buscar(artcode);
-                return producto;
+
+
+                string code = (string)Request.QueryString["ART"];
+                if (code != null)
+                {
+
+
+                    bool nuevo = true;
+                    List<Compra> aux = (List<Compra>)Session["chart"];
+                    foreach(Compra item in aux)
+                    {
+                        if(item.code == code)
+                        {
+                            item.amount++;
+                            nuevo = false;
+                        }
+                    }
+                    if(nuevo)
+                    {
+                    var auxproduct = productoBusiness.buscar(code);
+                    comp.name = auxproduct.name;
+                    comp.code = auxproduct.code;
+                    comp.amount = 1;
+                    comp.price = (float)auxproduct.precio;
+                    aux.Add(comp);
+                    }
+
+
+
+                    Session.Clear();
+                    Session["chart"] = aux;
+                }
 
             }
             catch (Exception)
             {
-
                 throw;
             }
 
+        }
+        public List<Compra> readsession()
+        {
 
-            
+            if (Session["chart"] == null)
+                Session["chart"] = new List<Compra>();
+
+
+            List<Compra> auxlist = (List<Compra>)Session["chart"];
+            return auxlist;
         }
     }
 }
