@@ -23,10 +23,14 @@
 
                 <div class="col-sm-4">
                     <h4>CARRITO</h4>
-                    <%foreach (Dominio.Compra item in chart)
-                        { %>
+                    <%  float total = 0;
+                        foreach (Dominio.Compra item in chart)
+                        {    total += item.price * item.amount;  %>
 
-                    <p><%=item.name %> cantidad: <%=item.amount %> precio <%=item.price %> total <%=item.price * item.amount %></p>
+                    <p class="overflow-auto"><%=item.name %> cantidad: <%=item.amount %> precio <%=item.price %> total <%=item.price * item.amount %></p>
+
+                    <%}  if(total > 0) {  %>
+                    <p> precio total: <%=total %></p>
 
                     <%} %>
                 </div>
