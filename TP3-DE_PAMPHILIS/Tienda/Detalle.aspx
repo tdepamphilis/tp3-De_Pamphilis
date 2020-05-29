@@ -14,20 +14,43 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
-            
-            <div class="card text-center">
-                <div class="card-header">
-                    Featured
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    Detalle de compra
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title"><% =product.name %> </h5>
-                    <img class="card-img-top" src="<% =product.imagen  %>" alt="Card image cap" height="200" width="100">
-                    <p class="card-text"><% =product.desc %></p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                <div class="col">
+                    3 of 3
                 </div>
-                <div class="card-footer text-muted">
-                    2 days ago
+            </div>
+            <div class="row">
+                <div class="col">
+                    1 of 3
+                </div>
+                <div class="col-15">
+
+
+                    <%foreach (Dominio.Compra item in items)
+
+                        { %>
+                    <div class="row">
+                        <div class="col-sm-40">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%=item.name %></h5>
+                                    <p class="card-text"><%= "Cantidad " + item.amount + " Precio unitario $" + item.price  %></p>
+                                    <a href="?del=<%=item.code %>" class="btn btn-primary">Eliminar</a>
+                                    <a href="?add=<%=item.code %>" class="btn btn-primary">Agregar </a>
+                                    <a href="?take=<%=item.code %>" class="btn btn-primary">Quitar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <%} %>
+                </div>
+                <div class="col">
+                    1 of 3
                 </div>
             </div>
         </div>
