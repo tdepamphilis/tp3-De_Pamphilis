@@ -30,6 +30,7 @@ namespace Tienda
             {
                 products = productoBusiness.listar(0, 0);
 
+                clear();
                 categories = categoriaBusiness.listar();
                 brands = marcaBusiness.listar();
                 startslider();
@@ -186,7 +187,7 @@ namespace Tienda
 
 
 
-                    Session.Clear();
+                    Session.Remove("chart");
                     Session["chart"] = aux;
                 }
 
@@ -206,6 +207,15 @@ namespace Tienda
 
             List<Compra> auxlist = (List<Compra>)Session["chart"];
             return auxlist;
+        }
+        private void clear()
+        {
+            string code = (string)Request.QueryString["clear"];
+            if (code != null)
+            {
+                
+                Session.Remove("chart");
+            }
         }
     }
 }

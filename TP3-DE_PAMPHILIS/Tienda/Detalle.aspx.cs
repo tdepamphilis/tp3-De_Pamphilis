@@ -24,6 +24,7 @@ namespace Tienda
                 delitem();
                 additem();
                 takeitem();
+                clear();
             }
         }
 
@@ -89,6 +90,14 @@ namespace Tienda
                 }
                 if (delindex != -1)
                     items.RemoveAt(delindex);
+            }
+        }
+        private void clear()
+        {
+            string code = (string)Request.QueryString["clear"];
+            if(code != null)
+            {
+                items = new List<Compra>();
             }
         }
     }

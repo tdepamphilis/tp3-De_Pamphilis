@@ -14,50 +14,63 @@
 
 </head>
 
-<body>
+<body style="background-color: cadetblue">
     <form id="form1" runat="server">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8" style="background-color:forestgreen; padding-bottom:200px">
-                    <h1 style="text-align:center; position:relative; top:180%">TIENDA ONLINE</h1>
-                </div>
-
-
+        <div class="jumbotron jumbotron-fluid" style="background-image:url(images/topbackground.png)">
+            <div class="container">
+                <h1 class="display-4">Tecno store</h1>
+                <p class="lead">Siempre con vos.</p>
             </div>
-            <div class="row"  style="position:relative; top:100px">
-                <div class="col-sm">
-                    <h4 style="text-align:center; position:relative; right:30px">Buscar</h4>
-                    <div>
-                        <asp:DropDownList style="padding-right:60px; " ID="DropDownListby" runat="server" OnSelectedIndexChanged="updatefilter" AutoPostBack="true"></asp:DropDownList>
-                        <asp:DropDownList style="padding-right:60px"  ID="DropDownListfilter" runat="server" AutoPostBack="true" OnSelectedIndexChanged="filterdata" OnDataBinding="filterdata"></asp:DropDownList>
-                        <asp:TextBox style="width:280px" ID="TextBoxsearch" runat="server" OnTextChanged="filterdata"></asp:TextBox>
+        </div>
+        <div class="container" style="background-color:white; border-width:medium; border:solid">
+            <h1 style="text-align:center; position:relative; top:50px">Nuestros productos</h1>
+            <div class="row" style="position: relative; top: 100px">
+                
+                <div class="col-sm">                    
+                    <div class="row">
+                        <div class="col text-center">
+                            <asp:DropDownList Style="width: inherit; text-align: center" CssClass="form-control" ID="DropDownListby" runat="server" OnSelectedIndexChanged="updatefilter" AutoPostBack="true"></asp:DropDownList>
+                        </div>
+                        <div class="col text-center">
+                            <asp:DropDownList Style="width: inherit; text-align: center" CssClass="form-control" ID="DropDownListfilter" runat="server" AutoPostBack="true" OnSelectedIndexChanged="filterdata" OnDataBinding="filterdata"></asp:DropDownList>
+                        </div>
+
+                        <div class="col-sm-5 text-center">
+
+                            <asp:TextBox Style="width: 100%" CssClass="form-control" ID="TextBoxsearch" runat="server" OnTextChanged="filterdata"></asp:TextBox>
+
+                        </div>
+                        <div class="col-sm-2 text-center">
+
+                            <asp:Button CssClass="btn btn-primary" type="button" ID="Button1" runat="server" Text="Buscar" OnClick="filterdata" Style="width: 100%" />
+
+                        </div>
+
                     </div>
                 </div>
-                <div class="col-sm">
-                    
+
+
+                <div class="col-sm-4" style="background-color: aqua; border: solid">
+                    <div class="container">
+
+                        <div class="row">
+                            <div class="col-sm text-center">
+                                <%  float total = 0;
+                                    string texto = " productos en carito.";
+                                    foreach (Dominio.Compra item in chart)
+                                    {
+                                        total += item.amount;
+                                    } %>
+                                <p style="position: relative; top: 8px"><%=total + texto %></p>
+                            </div>
+                            <div class="col-sm-5 text-center">
+                                <a class="btn btn-secondary btn-sm" style="position: relative; top: 4px" href="Detalle.aspx">ir a carrito</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-4" style="background-color:red; border:solid">
-                    <h4>CARRITO</h4>
-                    <%  float total = 0;
-                        string texto = "";
-                        foreach (Dominio.Compra item in chart)
-                        {
-                            total += item.price * item.amount;
-                            texto += item.name + "cantidad " + item.amount + Environment.NewLine;
-                        } %>
-                    <p class="overflow-auto"><%=texto %></p>
-
-                   
-                    <% if (total > 0)
-                    {  %>
-                    <p>precio total: <%=total %></p>
-
-                    <%} %>
-                    <a href="Detalle.aspx">ir a carrito</a>
-                </div>
-
             </div>
-            <div class="row row-cols-1 row-cols-md-4"  style="position:relative; top:100px">
+            <div class="row row-cols-1 row-cols-md-4" style="position: relative; top: 100px">
 
                 <% foreach (Dominio.Producto product in products)
                     {
@@ -66,25 +79,20 @@
                 <div class="col mb-4">
                     <div class="card">
                         <img src="<% = product.imagen %>" class="card-img-top" alt="..." height="200" width="80">
-                        <div class="card-body" style="height: 200px">
+                        <div class="card-body" style="height: 150px">
                             <h5 class="card-title" style="display: flex"><% = product.name %></h5>
                             <p class="card-subtitle">$<% =product.precio %> </p>
                             <p class="card-text" style="font-size: smaller"><% =product.desc %></p>
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer text-center">
 
-                            <a href="<%="?ART="+product.code %> ">comprar</a>
+                            <a class="btn btn-dark" href="<%="?ART="+product.code %> ">comprar</a>
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
                 <%} %>
             </div>
+            <div class="row" style="height:90px"></div>
         </div>
 
     </form>

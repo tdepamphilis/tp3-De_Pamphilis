@@ -12,46 +12,56 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
 </head>
-<body>
+<body style="background-color: aquamarine">
     <form id="form1" runat="server">
-        <div class="container">
-            <div class="row">
-                <div class="col-6">
-                    Detalle de compra
-                </div>
-                <div class="col">
-                    3 of 3
+        <div class="jumbotron jumbotron-fluid" style="background-image: url(images/topbackground.png); height: 260px">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-6" style="text-align: center;">
+
+                        <h1 class="display-4">Carrito</h1>
+                        <p class="lead">A un solo paso de tener lo que desea.</p>
+                    </div>
+                    <div class="col-2">
+
+                        <asp:Image ImageUrl="~/images/chart.png" runat="server" Style="height: 180px; width: 340px; overflow: visible;" />
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="container">
+            <%  float total = 0;
+                foreach (Dominio.Compra item in items)
+                {
+                    total += item.amount * item.price; %>
+            <div class="row" style="max-height: 50px; text-align: center">
+
+                <div class="col-3" style="border: solid; border-width: thin; border-color: black; text-align: left; background-color: white">
+                    <p style="font-size: smaller"><%=item.name %></p>
+
+                </div>
+                <div class="col-5" style="border: solid; border-width: thin; text-align: left; background-color: white">
+                    <p style="font-size: smaller"><%="Precio unitario: $"+item.price +" - cantidad: " +item.amount  + "- Subtotal: $"+item.amount*item.price %></p>
+                </div>
+                <div class="col-2" style="border: solid; border-width: thin; text-align: center; background-color: white">
+                    <a style="font-size: smaller" href="?del=<%=item.code %>">Eliminar</a>
+                    <a style="font-size: smaller" href="?add=<%=item.code %>">Agregar </a>
+                    <a style="font-size: smaller" href="?take=<%=item.code %>">Quitar</a>
+                </div>
+            </div>
+            <%} %>
             <div class="row">
-                <div class="col">
-                    1 of 3
+                <div class="col-6"></div>
+                <div class="col-2" style="border: solid; border-width: thin; background-color: white; text-align: left">
+                    <p><%="Total: $" + total %> </p>
                 </div>
-                <div class="col-15">
-
-
-                    <%foreach (Dominio.Compra item in items)
-
-                        { %>
-                    <div class="row">
-                        <div class="col-sm-40">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title"><%=item.name %></h5>
-                                    <p class="card-text"><%= "Cantidad " + item.amount + " Precio unitario $" + item.price  %></p>
-                                    <a href="?del=<%=item.code %>" class="btn btn-primary">Eliminar</a>
-                                    <a href="?add=<%=item.code %>" class="btn btn-primary">Agregar </a>
-                                    <a href="?take=<%=item.code %>" class="btn btn-primary">Quitar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <%} %>
+                <div class="col-2" style="border: solid; border-width: thin; background-color: white; text-align: center">
+                    <a href="#">pagar</a>
+                    <a href="Tienda.aspx?clear=true">vaciar</a>
+                    <a href="Tienda.aspx">volver</a>
                 </div>
-                <div class="col">
-                    1 of 3
-                </div>
+
             </div>
         </div>
     </form>
